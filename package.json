@@ -1,0 +1,27 @@
+{
+  "name": "hello-websocket",
+  "version": "0.1.0",
+  "description": "wcxaaa wants to learn socket.io",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/longyiszh/hello-websocket.git"
+  },
+  "author": "valorad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/longyiszh/hello-websocket/issues"
+  },
+  "homepage": "https://github.com/longyiszh/hello-websocket#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}
