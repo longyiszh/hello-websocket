@@ -36,4 +36,8 @@ const io = socket(server);
 
 io.on('connection', (socket) => {
   console.log(`socket ${socket.id} connected`);
+
+  socket.on('chat', (data) => {
+    io.sockets.emit('chat', data);
+  });
 });

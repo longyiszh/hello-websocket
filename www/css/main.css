@@ -19,6 +19,7 @@ header.app > h1 {
 
 div.dialogHolder {
   display: flex;
+  margin-bottom: 3em;
 }
 
 div.avatarHolder {
@@ -28,11 +29,15 @@ div.avatarHolder {
   text-align: center;
 }
 
-div.avatar {
+div.dialogAvatar {
   width: 64px;
   height: 64px;
   border: 1px solid #03a9f4;
   margin: 0em auto;
+}
+
+div.dialogAvatar > img {
+  max-width: 100%;
 }
 
 div.messageHolder {

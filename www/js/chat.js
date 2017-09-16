@@ -71,7 +71,6 @@ const getChatterInfo = (chatterName) => {
 };
 
 const assignChatter = async (name) => {
-  console.log("hhhhhh");
   let newChatterInfo = await getChatterInfo(name);
   
   let target = document.querySelector("button#switchUser > img");
@@ -95,17 +94,8 @@ const toggle = (selector) => {
   return ele;
 };
 
-// DOM events
-const suButton = document.querySelector("button#switchUser");
-suButton.addEventListener('click', () => {
-  toggle("section.chatterMenu");
-});
-
-// init
-
 // place chatter selections
 
-//let localChatters = [];
 const placeChatterSelections = (chatters) => {
   let target = document.querySelector("section.chatterMenu > ul");
   if (target) {
@@ -115,7 +105,7 @@ const placeChatterSelections = (chatters) => {
 
         <div class="menuItem">
           <div class="menuAvatar">
-            <img src="images/${chatter.avatar}" alt="${chatter.name}">
+            <img src="images/${chatter.avatar}" alt="${chatter.nameDisplay}" title="${chatter.name}">
           </div>
           <div class="menuName">
             <p>${chatter.nameDisplay}</p>
@@ -124,17 +114,80 @@ const placeChatterSelections = (chatters) => {
 
       `;
       newLi.innerHTML = newChatter;
+      newLi.addEventListener('click', async () => {
+        await assignChatter(chatter.name);
+        toggle("section.chatterMenu");
+      });
       target.appendChild(newLi);
     }
   }
 };
 
-chatters.subscribe(
-  (resChatters) => {
-    // localChatters = resChatters;
-    placeChatterSelections(resChatters);
-    //console.log(resChatters);
-  }
-)
 
-assignChatter("norryowl");
+
+// DOM events
+const suButton = document.querySelector("button#switchUser");
+suButton.addEventListener('click', () => {
+  toggle("section.chatterMenu");
+});
+
+//  -- init --
+
+
+const init = async () => {
+  // get character selection menu data
+  chatters.subscribe(
+    (resChatters) => {
+      // localChatters = resChatters;
+      placeChatterSelections(resChatters);
+      //console.log(resChatters);
+    }
+  )
+
+  let defaultChatter = await assignChatter("norryowl");
+
+  // grab dom element for comm to rear-end
+  let messageBox = document.querySelector("textarea#msg");
+  let chatterBox = document.querySelector("button#switchUser > img");
+  let dialogBox = document.querySelector("main.app");
+
+  const sendButton = document.querySelector("button#send");
+  sendButton.addEventListener('click', ()=> {
+    socket.emit('chat', {
+      message: messageBox.value,
+      chatter: chatterBox.title
+    });
+    messageBox.value = "";
+  });
+
+  socket.on('chat', async (data) => {
+    let chatter = await getChatterInfo(data.chatter);
+    let newDialog = document.createElement("div");
+    newDialog.className = "dialogHolder";
+
+    newDialog.innerHTML = `
+    
+      <div class="avatarHolder">
+        <div class="dialogAvatar">
+          <img src="images/${chatter[0].avatar}" alt="${chatter[0].nameDisplay}" title="${chatter[0].name}">
+        </div>
+      </div>
+
+      <div class="messageHolder">
+        <p>${chatter[0].nameDisplay}</p>
+        <div class="message">
+          ${data.message}
+        </div>
+      </div>
+
+    `;
+
+    dialogBox.appendChild(newDialog);
+
+  });
+
+};
+
+init();
+
+
