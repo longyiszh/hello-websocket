@@ -1,3 +1,71 @@
+body {
+  background: #e1f5fe;
+  margin: 0px;
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+header.app {
+  background: #03a9f4;
+}
+
 header.app > h1 {
   text-align: center;
+  margin: 0px;
+  color: whitesmoke;
+}
+
+div.dialogHolder {
+  display: flex;
+}
+
+div.avatarHolder {
+  width: 5%;
+  margin: 0.5em 1.5em;
+  display: inline-block;
+  text-align: center;
+}
+
+div.avatar {
+  width: 64px;
+  height: 64px;
+  border: 1px solid #03a9f4;
+  margin: 0em auto;
+}
+
+div.messageHolder {
+  width: 85%;
+  display: inline-block;
+}
+
+div.messageHolder > p {
+  margin: 0px;
+}
+
+div.message {
+  background-color: white;
+  padding: 1em;
+  margin-top: 0.5em;
+  height: 100%;
+}
+
+footer.app {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  background-color: #03a9f4;
+  text-align: center;
+}
+
+footer.app > input[type='text'] {
+  width: 90%;
+  margin: 1em;
+  background: white;
+}
+
+footer.app > button {
+  background: white;
+  border: 0px;
 }

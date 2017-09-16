@@ -35,5 +35,5 @@ server.listen(1024, 'localhost', () => {
 const io = socket(server);
 
 io.on('connection', (socket) => {
-  console.log(`socket connected`);
+  console.log(`socket ${socket.id} connected`);
 });
