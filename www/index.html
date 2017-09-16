@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
+  <script src="https://unpkg.com/@reactivex/rxjs@5.0.0-beta.12/dist/global/Rx.js"></script>
   <title>Hello Websocket</title>
 </head>
 <body>
@@ -31,11 +32,22 @@
     </main>
 
     <footer class="app">
-      <input id="msg" type="text" placeholder="Message">
+      <button id="switchUser">
+        <img src="" alt="...">
+      </button>
+      <textarea id="msg" placeholder="Message"></textarea>
       <button id="send">Send</button>
     </footer>
   </div>
+  <section class="chatterMenu">
+    <ul>
+      <!-- menuitem DOM generated via chat.js -->
+    </ul>
+  </section>
   <!-- Scripts -->
   <script src="js/chat.js"></script>
 </body>
 </html>
+
+
+

@@ -52,20 +52,77 @@ div.message {
 }
 
 footer.app {
+  display: flex;
   position: fixed;
   bottom: 0px;
   width: 100%;
   background-color: #03a9f4;
   text-align: center;
+  z-index: 100;
 }
 
-footer.app > input[type='text'] {
-  width: 90%;
+footer.app > textarea#msg {
+  display: block;
+  width: 100%;
   margin: 1em;
   background: white;
 }
 
 footer.app > button {
+  display: block;
+  max-width: 5%;
   background: white;
   border: 0px;
+  white-space: nowrap;
+}
+
+footer.app > button > img {
+  max-width: 100%;
+}
+
+section.chatterMenu {
+  display: none;
+  white-space: nowrap;
+  overflow-y: scroll;
+  width: 17em;
+  height: 21em;
+  position: absolute;
+  bottom: 5em;
+  left: 1em;
+  background: white;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+section.chatterMenu > ul {
+  list-style-type: none;
+  padding-left: 0.5em;
+}
+
+section.chatterMenu li {
+  margin-bottom: 1em;
+}
+
+div.menuItem {
+  display: flex;
+  cursor: pointer;
+}
+
+div.menuItem:hover {
+  background: #eeeeee;
+}
+
+div.menuItem div.menuAvatar {
+  height: 64px;
+  width: 64px;
+  border: 0.25em solid #03a9f4;
+}
+
+div.menuItem div.menuAvatar img {
+  width: 64px;
+  max-width: 100%;
+}
+
+div.menuItem div.menuName {
+  padding-left: 0.5em;
 }
