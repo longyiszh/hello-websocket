@@ -17,6 +17,10 @@ header.app > h1 {
   color: whitesmoke;
 }
 
+main.app {
+  margin-bottom: 7em;
+}
+
 div.dialogHolder {
   display: flex;
   margin-bottom: 3em;
@@ -46,14 +50,16 @@ div.messageHolder {
 }
 
 div.messageHolder > p {
-  margin: 0px;
+  margin: 0px 0px 0px 1em;
 }
 
 div.message {
   background-color: white;
   padding: 1em;
   margin-top: 0.5em;
+  margin-left: 0.5em;
   height: 100%;
+  width: 80%;
 }
 
 footer.app {
@@ -91,7 +97,7 @@ section.chatterMenu {
   overflow-y: scroll;
   width: 17em;
   height: 21em;
-  position: absolute;
+  position: fixed;
   bottom: 5em;
   left: 1em;
   background: white;
