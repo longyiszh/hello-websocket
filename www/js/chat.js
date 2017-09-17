@@ -271,7 +271,7 @@ const init = async () => {
         <div class="messageHolder">
           <p>${chatter[0].nameDisplay}</p>
           <div class="message">
-            <em>${chatter[0].nameDisplay} is typing...</em>
+            <em>[${chatter[0].nameDisplay} is typing...]</em>
           </div>
         </div>
   
