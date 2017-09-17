@@ -80,8 +80,6 @@ const assignChatter = async (name) => {
     target.title = newChatterInfo[0].name;
   }
 
-  console.log(newChatterInfo);
-
   return newChatterInfo;
 
 };
@@ -123,7 +121,53 @@ const placeChatterSelections = (chatters) => {
   }
 };
 
+let chatterTyping = [];
 
+// const chatterTypingObs = Rx.Observable.of(chatterTyping)
+//   .subscribe((val) => {
+//     console.log(val);
+//   });
+
+const chatterTypingSub = new Rx.Subject();
+
+const addTypingChatter = (name) => {
+  if (
+    // the chatter has not typed
+    chatterTyping.some((existChatter)=>{
+      return existChatter === name;
+    })
+  ) {
+    // already in, do nothing
+
+  } else {
+    chatterTyping.push(name);
+  }
+
+};
+
+const deleteTypingChatter = (chatterName) => {
+  let cIndex = chatterTyping.indexOf(chatterName);
+  if (cIndex >= 0) {
+    chatterTyping.splice(cIndex, 1);
+  }
+};
+
+const getTypingChatter = () => {
+  return new Promise((resolve, reject) => {
+    chatterTypingSub.subscribe(
+      (val) => {
+        resolve(val);
+      },
+      (err) => {
+        reject(err);
+      },
+      () => {
+        chatterTypingSub.unsubscribe();
+      }
+    );
+    chatterTypingSub.next(chatterTyping);
+  });
+};
 
 // DOM events
 const suButton = document.querySelector("button#switchUser");
@@ -138,18 +182,18 @@ const init = async () => {
   // get character selection menu data
   chatters.subscribe(
     (resChatters) => {
-      // localChatters = resChatters;
+
       placeChatterSelections(resChatters);
-      //console.log(resChatters);
+
     }
   )
 
   let defaultChatter = await assignChatter("norryowl");
 
   // grab dom element for comm to rear-end
-  let messageBox = document.querySelector("textarea#msg");
-  let chatterBox = document.querySelector("button#switchUser > img");
-  let dialogBox = document.querySelector("main.app");
+  
+  const chatterBox = document.querySelector("button#switchUser > img");
+  const dialogBox = document.querySelector("main.app");
 
   const sendButton = document.querySelector("button#send");
   sendButton.addEventListener('click', ()=> {
@@ -158,6 +202,22 @@ const init = async () => {
       chatter: chatterBox.title
     });
     messageBox.value = "";
+  });
+
+  const messageBox = document.querySelector("textarea#msg");
+
+  const messageEnter = Rx.Observable.fromEvent(messageBox, 'keyup')
+    .throttleTime(1000)
+    //.map(event => event.target.value)
+    .subscribe(() => {
+      socket.emit('typing', chatterBox.title);
+    });
+
+  const messageOver = Rx.Observable.fromEvent(messageBox, 'keyup')
+  .debounceTime(1000)
+  //.map(event => event.target.value)
+  .subscribe(() => {
+    socket.emit('typeOver', chatterBox.title);
   });
 
   socket.on('chat', async (data) => {
@@ -185,6 +245,61 @@ const init = async () => {
     dialogBox.appendChild(newDialog);
 
   });
+
+
+  socket.on('typing', async (chatterName) => {
+    // push chatterTyping
+    let allTypingChatters = await getTypingChatter(chatterName);
+    //console.log(allTypingChatters);
+    
+    if (!allTypingChatters.includes(chatterName)) {
+      // not included in the current chatters, then gather info and show typing dialog
+      let chatter = await getChatterInfo(chatterName);
+
+      let newTyping = document.createElement("div");
+      
+      newTyping.className = `dialogHolder typing-${chatter[0].name}`;
+      
+      newTyping.innerHTML = `
+          
+        <div class="avatarHolder">
+          <div class="dialogAvatar">
+            <img src="images/${chatter[0].avatar}" alt="${chatter[0].nameDisplay}" title="${chatter[0].name}">
+          </div>
+        </div>
+  
+        <div class="messageHolder">
+          <p>${chatter[0].nameDisplay}</p>
+          <div class="message">
+            <em>${chatter[0].nameDisplay} is typing...</em>
+          </div>
+        </div>
+  
+      `;
+      
+      dialogBox.appendChild(newTyping);
+
+      // add to the array
+      addTypingChatter(chatterName);
+    }
+
+
+  });
+
+  socket.on('typeOver', (chatterName) => {
+    // delete chatter name from the array
+    deleteTypingChatter(chatterName);
+
+    // remove from the dom
+
+    let oldTypingFeed = document.querySelector(`.typing-${chatterName}`);
+    if (oldTypingFeed) {
+      oldTypingFeed.closest(".app").removeChild(oldTypingFeed);
+    }
+
+  });
+
+  //const feedbackBox = document.querySelector("section.feedback");
 
 };
 
