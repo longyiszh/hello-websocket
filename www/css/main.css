@@ -17,6 +17,10 @@ header.app > h1 {
   color: whitesmoke;
 }
 
+section.feedback {
+  text-align: center;
+}
+
 main.app {
   margin-bottom: 7em;
 }
@@ -60,6 +64,7 @@ div.message {
   margin-left: 0.5em;
   height: 100%;
   width: 80%;
+  word-wrap: break-word;
 }
 
 footer.app {
